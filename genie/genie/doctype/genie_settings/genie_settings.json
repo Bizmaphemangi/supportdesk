@@ -1,0 +1,119 @@
+{
+ "actions": [],
+ "creation": "2023-10-12 19:45:56.953475",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enable_ticket_raising",
+  "column_break_nuxg",
+  "enable_user_impersonation",
+  "support_portal_section",
+  "support_url",
+  "save_recording",
+  "close_ticket_after_days",
+  "column_break_atib",
+  "support_api_token",
+  "max_recording_size",
+  "section_break_tazx",
+  "column_break_mkgz",
+  "ticket_details"
+ ],
+ "fields": [
+  {
+   "depends_on": "enable_ticket_raising",
+   "fieldname": "support_portal_section",
+   "fieldtype": "Section Break",
+   "label": "Support Portal"
+  },
+  {
+   "description": "Example: https://support.frappe.io",
+   "fieldname": "support_url",
+   "fieldtype": "Data",
+   "label": "URL",
+   "mandatory_depends_on": "enable_ticket_raising"
+  },
+  {
+   "fieldname": "column_break_nuxg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_ticket_raising",
+   "fieldtype": "Check",
+   "label": "Enable Ticket Raising"
+  },
+  {
+   "description": "Format: api_key:api_secret",
+   "fieldname": "support_api_token",
+   "fieldtype": "Password",
+   "label": "API Token",
+   "mandatory_depends_on": "enable_ticket_raising"
+  },
+  {
+   "fieldname": "ticket_details",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Ticket Details",
+   "options": "Support Ticket Details"
+  },
+  {
+   "fieldname": "column_break_atib",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "save_recording",
+   "fieldtype": "Select",
+   "label": "Save Recording",
+   "options": "Public\nPrivate"
+  },
+  {
+   "depends_on": "enable_ticket_raising",
+   "fieldname": "section_break_tazx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "max_recording_size",
+   "fieldtype": "Int",
+   "label": "Max Recording Size(MB)"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_user_impersonation",
+   "fieldtype": "Check",
+   "label": "Enable User Impersonation"
+  },
+  {
+   "fieldname": "column_break_mkgz",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  },
+  {
+   "fieldname": "close_ticket_after_days",
+   "fieldtype": "Int",
+   "label": "Close Ticket After Days"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-04-19 10:37:50.292067",
+ "modified_by": "Administrator",
+ "module": "Genie",
+ "name": "Genie Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,201 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{DD}{MM}{YY}-{###}",
+ "creation": "2024-11-19 12:26:28.967341",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "subject",
+  "description",
+  "view_recording",
+  "column_break_oxkt",
+  "status",
+  "category",
+  "post_to_git",
+  "previous_status",
+  "support_ticket_id",
+  "customer_feedback_section",
+  "rating",
+  "feedback_option",
+  "feedback_extra",
+  "resolution_details_section",
+  "resolution_details",
+  "column_break_nvcn",
+  "resolution_time",
+  "responded_on",
+  "section_break_jlft",
+  "ticket_timeline",
+  "timeline_graph",
+  "timeline_graph2",
+  "timeline_graph3"
+ ],
+ "fields": [
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "label": "Subject",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Ticket Status",
+   "options": "Ticket Status",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.status==\"Resolved\" || doc.status==\"Closed\";",
+   "fieldname": "customer_feedback_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Feedback"
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Rating",
+   "label": "Rating"
+  },
+  {
+   "columns": 5,
+   "fieldname": "feedback_extra",
+   "fieldtype": "Long Text",
+   "label": "Feedback (Extra)",
+   "max_height": "60px"
+  },
+  {
+   "fieldname": "feedback_option",
+   "fieldtype": "Link",
+   "label": "Feedback (Option)",
+   "options": "Ticket Feedback Option"
+  },
+  {
+   "fieldname": "column_break_oxkt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "post_to_git",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "Post To Git"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "options": "Bug\nDoubt\nFeature Request\nChange Request",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "resolution_details_section",
+   "fieldtype": "Section Break",
+   "label": "Resolution Details"
+  },
+  {
+   "fieldname": "resolution_details",
+   "fieldtype": "Text Editor",
+   "label": "Resolution Details",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_nvcn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "resolution_time",
+   "fieldtype": "Duration",
+   "hidden": 1,
+   "label": "Resolution Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_jlft",
+   "fieldtype": "Section Break",
+   "label": "Ticket Timeline Details"
+  },
+  {
+   "fieldname": "ticket_timeline",
+   "fieldtype": "Table",
+   "label": "Ticket Timeline",
+   "options": "Ticket Timeline Entry"
+  },
+  {
+   "fieldname": "previous_status",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Previous Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "support_ticket_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Support Ticket Id"
+  },
+  {
+   "fieldname": "responded_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Responded On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "timeline_graph",
+   "fieldtype": "HTML",
+   "label": "Timeline Graph"
+  },
+  {
+   "fieldname": "timeline_graph2",
+   "fieldtype": "HTML",
+   "label": "Timeline Graph2"
+  },
+  {
+   "fieldname": "timeline_graph3",
+   "fieldtype": "HTML",
+   "label": "Timeline Graph3"
+  },
+  {
+   "fieldname": "view_recording",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "View Recording"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-29 17:45:28.359169",
+ "modified_by": "Administrator",
+ "module": "Genie",
+ "name": "Ticket Details",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

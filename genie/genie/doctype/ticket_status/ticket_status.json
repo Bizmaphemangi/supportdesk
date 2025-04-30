@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:label",
+ "creation": "2024-12-11 15:52:31.052492",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "label",
+  "bug",
+  "doubt",
+  "change_request",
+  "feature_request"
+ ],
+ "fields": [
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "bug",
+   "fieldtype": "Check",
+   "label": "Bug"
+  },
+  {
+   "default": "0",
+   "fieldname": "doubt",
+   "fieldtype": "Check",
+   "label": "Doubt"
+  },
+  {
+   "default": "0",
+   "fieldname": "change_request",
+   "fieldtype": "Check",
+   "label": "Change Request"
+  },
+  {
+   "default": "0",
+   "fieldname": "feature_request",
+   "fieldtype": "Check",
+   "label": "Feature Request"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-14 10:07:59.893923",
+ "modified_by": "Administrator",
+ "module": "Genie",
+ "name": "Ticket Status",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_views": 1
+}
