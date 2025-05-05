@@ -1,13 +1,6 @@
 frappe.ui.form.on("Ticket Details", {
 
     refresh: function (frm) {
-      
-        // if(frm.doc.status == "Closed" || frm.doc.status == 'Resolved'){
-        //     frm.set_df_property('customer_feedback_section','hidden','1')
-        // }
-        // else{
-        //     frm.set_df_property('customer_feedback_section','hidden','0')
-        // }
 
         if(frm.doc.status != 'Closed'){
         frm.add_custom_button(__("Close"), function() {

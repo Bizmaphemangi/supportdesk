@@ -128,6 +128,7 @@
   {
    "fieldname": "ticket_timeline",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Ticket Timeline",
    "options": "Ticket Timeline Entry"
   },
@@ -175,7 +176,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-29 17:45:28.359169",
+ "modified": "2025-05-05 10:13:02.430288",
  "modified_by": "Administrator",
  "module": "Genie",
  "name": "Ticket Details",

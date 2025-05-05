@@ -12,14 +12,14 @@ class TicketDetails(Document):
 	def validate(self):
 		if self.status == 'Closed':
 			doc = {
-				"status": self.status,
+				"custom_ticket_status": self.status,
 				"custom_reference_ticket_id": self.name,
-				'feedback_option': self.feedback_option or '',
-				'feedback_extra': self.feedback_extra or ''
+				'custom_feedback': self.feedback_option or '',
+				'custom_feedback_extra': self.feedback_extra or ''
 			}
 		elif self.status == 'Re-Opened':
 			doc = {
-				"status": self.status,
+				"custom_ticket_status": self.status,
 				"custom_reference_ticket_id": self.name
 			}
 		elif self.status == 'Replied':
@@ -95,7 +95,7 @@ class TicketDetails(Document):
 				"note": timeline_entry.note,
 				"added_by": timeline_entry.added_by,
 				"parent": self.support_ticket_id,  # Should match support-side ticket name
-				"parenttype": "HD Ticket",
+				"parenttype": "Issue",
 				"parentfield": "ticket_timeline"
 			}
 			response = session.post(support_url, headers=headers, json=data)

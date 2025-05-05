@@ -53,7 +53,7 @@ def received_host_comment(doc):
 	cmt.reference_doctype = "Ticket Details"
 	cmt.reference_name = doc['client_ticket']
 	cmt.comment_email = doc['comment_email']
-	cmt.comment_by = f"BizmapSupport ({doc['comment_by']})"
+	cmt.comment_by = doc['comment_by']
 	cmt.content = doc['content']
 	cmt.custom_is_system_generated = 1
 
@@ -116,13 +116,16 @@ def upload_video_to_support(local_ticket_id):
 	file_name = file_record["file_name"]
 	is_private = file_record["is_private"]
 
+
+	relative_path = file_url.lstrip("/")  # removes leading slash
+	file_path = frappe.get_site_path(relative_path)
 	# Determine the correct file path dynamically
-	if is_private:
-		# Private files are stored in /private/files/
-		file_path = frappe.get_site_path("private", "files", file_name)
-	else:
-		# Public files are stored in /public/files/
-		file_path = frappe.get_site_path("public", "files", file_name)
+	# if is_private:
+	# 	# Private files are stored in /private/files/
+	# 	file_path = frappe.get_site_path("private", "files", file_name)
+	# else:
+	# 	# Public files are stored in /public/files/
+	# 	file_path = frappe.get_site_path("public", "files", file_name)
 
 
 	# Read and upload file to support system
@@ -159,9 +162,9 @@ def create_ticket(title, description, category, screen_recording=None):
 	doc = {	
 				"description": description,
 				"subject": title,
-				"custom_created_by_email": f"{user}",
-				"custom_created_by_name": f"{userfullname}",
-				"category": f"{category}",
+				"custom_created_byemail": f"{user}",
+				"custom_created_byname": f"{userfullname}",
+				"custom_category": f"{category}",
 				"custom_reference_ticket_id": local_ticket,             ##### send local ticket id
 				"custom_reference_ticket_token": token,
 				"custom_client_url": f"{frappe.request.scheme}://{frappe.request.host}",
