@@ -28,8 +28,8 @@ class GenieSettings(Document):
 				payload={}
 			).get("message")
 
-			if not support_portal.get("helpdesk"):
-				frappe.throw(_("{0} does not have Helpdesk app installed.").format(self.support_url))
+			# if not support_portal.get("helpdesk"):
+			# 	frappe.throw(_("{0} does not have Helpdesk app installed.").format(self.support_url))
 			# self.role_permission()
 
 	def role_permission(self):		

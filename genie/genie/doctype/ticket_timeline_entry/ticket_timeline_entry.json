@@ -9,7 +9,7 @@
   "timestamp",
   "date",
   "status",
-  "note",
+  "notes",
   "added_by"
  ],
  "fields": [
@@ -27,21 +27,21 @@
   },
   {
    "fieldname": "status",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Open\nReplied\nResolved\nClosed\nRe-Opened"
-  },
-  {
-   "fieldname": "note",
-   "fieldtype": "Small Text",
-   "label": "Note"
+   "options": "Ticket Status"
   },
   {
    "fieldname": "added_by",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Added By"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
   }
  ],
  "index_web_pages_for_search": 1,

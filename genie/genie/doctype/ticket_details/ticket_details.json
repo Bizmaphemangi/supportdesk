@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_events_in_timeline": 1,
  "allow_rename": 1,
  "autoname": "format:{DD}{MM}{YY}-{###}",
  "creation": "2024-11-19 12:26:28.967341",
@@ -58,7 +59,7 @@
    "fieldname": "customer_feedback_section",
    "fieldtype": "Section Break",
    "label": "Customer Feedback"
-  },
+  },    
   {
    "fieldname": "rating",
    "fieldtype": "Rating",
@@ -91,18 +92,16 @@
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "options": "Bug\nDoubt\nFeature Request\nChange Request",
-   "read_only": 1
+   "options": "Bug\nDoubt\nFeature Request\nChange Request"
   },
   {
-   "collapsible": 1,
    "fieldname": "resolution_details_section",
    "fieldtype": "Section Break",
    "label": "Resolution Details"
   },
   {
    "fieldname": "resolution_details",
-   "fieldtype": "Text Editor",
+   "fieldtype": "Small Text",
    "label": "Resolution Details",
    "read_only": 1
   },
@@ -196,5 +195,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
