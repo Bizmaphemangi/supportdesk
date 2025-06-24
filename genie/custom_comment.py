@@ -13,14 +13,15 @@ from frappe.utils import get_url
 @frappe.whitelist()
 def after_insert(doc, method):
 	if doc.reference_doctype == "Ticket Details":
-		if doc.custom_is_system_generated == 0:
+		if doc.custom_is_system_generated == 0  and doc.comment_type == "Comment":
 			# Check if the comment is from the host
 			client_comment(doc)
 		else:
 			user = frappe.db.get_value("User", {"full_name": doc.comment_by}, "name")
 			if user:
+				pass
 				# Send notification to the user
-				send_notification(user, doc)
+				# send_notification(user, doc)
 @frappe.whitelist()
 def client_comment(doc):
 	settings = frappe.get_cached_doc("Genie Settings")
@@ -45,10 +46,6 @@ def client_comment(doc):
 			json=payload,  
 			timeout=10  # Optional timeout
 		)
-		# user = frappe.db.get_value("User", {"full_name": doc.comment_by}, "name")
-		# if user:
-		# 	send_notification(user, doc)
-		# Raise exception for HTTP errors
 		response.raise_for_status()
 		
 		# Log and return the response

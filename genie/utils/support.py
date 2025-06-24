@@ -8,7 +8,10 @@ from frappe.query_builder.functions import Concat_ws
 from frappe.utils import cint, flt, get_url, now
 from frappe.utils.safe_exec import get_safe_globals, safe_eval
 import requests
-from genie.utils.requests import make_request
+from datetime import datetime
+import json
+
+# from genie.utils.requests import make_request
 
 
 @frappe.whitelist()
@@ -53,8 +56,8 @@ def received_host_comment(doc):
 	cmt.reference_doctype = "Ticket Details"
 	cmt.reference_name = doc['client_ticket']
 	cmt.comment_email = doc['comment_email']
-	cmt.comment_by = doc['comment_by']
-	cmt.content = doc['content']
+	cmt.comment_by = f"BizmapSupport ({doc['comment_by']})"
+	cmt.content = doc['content'] + f"{doc['comment_by']} from Bizmap Support"
 	cmt.custom_is_system_generated = 1
 
 	frappe.logger().debug(f"Current User: {frappe.session.user}, Roles: {frappe.get_roles()}")
@@ -65,35 +68,16 @@ def received_host_comment(doc):
 
 @frappe.whitelist()
 def set_status(doc):
-	ticket = frappe.get_doc("Ticket Details", doc['client_ticket'])
-	current_status = ticket.status
-	new_status = doc['status']
-	new_resolution = doc.get('resolution_details')
+	frappe.log_error(f"{doc}")
 
-	# Case 1: Reopen → send resolution again → mark Resolved
-	if current_status == "Reopen" and new_resolution:
-		ticket.status = "Resolved"
-		ticket.resolution_details = new_resolution
+	ticket = frappe.get_doc("Ticket Details", doc.get('client_ticket'))
 
-	# Case 2: Already Resolved/Closed → resolution updated → just update text
-	elif current_status in ("Resolved", "Closed") and new_resolution:
-		ticket.resolution_details = new_resolution
-
-	# Case 3: Any other status update
-	else:
-		ticket.status = new_status
-		if new_resolution:
-			ticket.resolution_details = new_resolution
+	ticket.status = doc.get('status')
+	if doc.get('resolution_details'):
+		ticket.resolution_details = doc.get('resolution_details')
 
 	ticket.save()
-	frappe.db.commit()
 
-
-@frappe.whitelist()
-def set_resolution(doc):
-	frappe.db.set_value("Ticket Details", doc['client_ticket'],"resolution_details", doc['resolution_details'])
-	frappe.db.set_value("Ticket Details", doc['client_ticket'],"status", doc['status'])
-	frappe.db.commit()
 
 def upload_video_to_support(local_ticket_id):
 	settings = frappe.get_cached_doc("Genie Settings")
@@ -116,16 +100,13 @@ def upload_video_to_support(local_ticket_id):
 	file_name = file_record["file_name"]
 	is_private = file_record["is_private"]
 
-
-	relative_path = file_url.lstrip("/")  # removes leading slash
-	file_path = frappe.get_site_path(relative_path)
 	# Determine the correct file path dynamically
-	# if is_private:
-	# 	# Private files are stored in /private/files/
-	# 	file_path = frappe.get_site_path("private", "files", file_name)
-	# else:
-	# 	# Public files are stored in /public/files/
-	# 	file_path = frappe.get_site_path("public", "files", file_name)
+	if is_private:
+		# Private files are stored in /private/files/
+		file_path = frappe.get_site_path("private", "files", file_name)
+	else:
+		# Public files are stored in /public/files/
+		file_path = frappe.get_site_path("public", "files", file_name)
 
 
 	# Read and upload file to support system
@@ -170,14 +151,17 @@ def create_ticket(title, description, category, screen_recording=None):
 				"custom_client_url": f"{frappe.request.scheme}://{frappe.request.host}",
 				**generate_ticket_details(settings),
 			}
-	hd_ticket = make_request(
-		url=f"{settings.support_url}/api/method/supportsystem.supportsystem.custom.custom_api.custom_new",
-		headers=headers,
-		payload={
-			"doc": doc,
-			"attachments": [hd_ticket_file] if hd_ticket_file else [],
-		}
-	).get("message", {}).get("name")
+	response = requests.post(
+
+	url=f"{settings.support_url}/api/method/supportsystem.supportsystem.custom.custom_api.custom_new",
+	headers=headers,
+    json={
+        "doc": doc,
+        "attachments": [hd_ticket_file] if hd_ticket_file else [],
+    }
+	)
+	
+	hd_ticket = response.json().get("message", {}).get("name")
 	frappe.db.set_value("Ticket Details", local_ticket, "support_ticket_id", hd_ticket)
 	return hd_ticket
 
@@ -186,7 +170,7 @@ def get_user_fullname(user: str) -> str:
 	user_doctype = DocType("User")
 	return (
 		frappe.get_value(
-			user_doctype,
+			user_doctype,	
 			filters={"name": user},
 			fieldname=Concat_ws(" ", user_doctype.first_name, user_doctype.last_name),
 		)
@@ -215,3 +199,83 @@ def generate_ticket_details(settings):
 
 	return req_params
 
+
+
+@frappe.whitelist(allow_guest=True)
+def make_timeline_entry(doc):
+	ticket = frappe.get_doc("Ticket Details", doc.get('parent'))
+	ticket.append("ticket_timeline", {
+		"timestamp": datetime.now(),
+		"date": doc.get('date'),
+		"status": doc.get('status'),
+		"notes": doc.get('notes'),
+		"added_by": doc.get("added_by"),
+	})
+	ticket.save(ignore_permissions=True)
+
+	return {"message": "Timeline entry synced successfully"}
+
+
+@frappe.whitelist()
+def sync_details_to_support(doc):
+	doc = json.loads(doc)
+	doc = {
+			"custom_ticket_status": doc.get('status'),
+			"custom_reference_ticket_id": doc.get('name'),
+			'custom_rating': doc.get('rating') or '',
+			'custom_feedback': doc.get("feedback_option") or '',
+			'custom_feedback_extra': doc.get("feedback_extra") or '',
+			'custom_category': doc.get("category") or ''
+		}
+	frappe.logger().info(f"[SyncDetails] Status: {doc.get('custom_ticket_status')}")
+
+	settings = frappe.get_cached_doc("Genie Settings")
+
+	payload = {'doc': doc}
+	headers = {
+		"Authorization": f"token {settings.get_password('support_api_token')}"
+	}
+	try:
+
+		session = requests.Session()
+		api_url = f"{settings.support_url}/api/method/supportsystem.supportsystem.custom.custom_hd_ticket.set_status"
+		response = session.post(
+			url=api_url,
+			headers=headers,
+			json=payload,
+			timeout=30  # Set a timeout for the request
+		)
+		frappe.log_error(f"API Response: {response.status_code} - {response.text}", "API Response Debug")
+	except requests.exceptions.RequestException as e:
+		frappe.log_error(f"Error during API call: {str(e)}\nPayload: {payload}\nHeaders: {headers}", "API Error")
+		frappe.throw("An error occurred while connecting to the support system.")
+
+
+@frappe.whitelist()
+def sync_timeline_to_support_system(doc):
+	doc = json.loads(doc)
+	settings = frappe.get_cached_doc("Genie Settings")
+
+	idoc = frappe.get_doc("Ticket Details", doc.get('name'))
+
+	if(idoc and doc.get('status') != idoc.status):
+		try:
+			timeline_entry = idoc.get('ticket_timeline')[-1] if idoc.get('ticket_timeline') else None
+			if timeline_entry:
+				headers = {
+					"Authorization": f"token {settings.get_password('support_api_token')}"
+				}
+				url = f"{settings.support_url}/api/resource/Ticket Timeline Entry"
+				data = {
+					"parent": idoc.support_ticket_id,
+					"parenttype": "Issue",
+					"parentfield": "custom_ticket_timeline",
+					"date": frappe.utils.today(),
+					"status": doc.get('status'),
+					"notes": timeline_entry.notes,
+					"added_by": timeline_entry.added_by
+				}
+				response = requests.post(url, headers=headers, json=data)
+				frappe.log_error(f"URL: {url}\nHEADERS: {headers}\nDATA: {data}\nResponse: {response}","PUT Data info")
+		except Exception as e:
+			frappe.log_error(f"timeline sync error:\n\n {str(e)}")

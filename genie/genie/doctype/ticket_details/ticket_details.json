@@ -35,16 +35,14 @@
    "fieldname": "subject",
    "fieldtype": "Data",
    "label": "Subject",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "description",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Description",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "default": "Open",
@@ -53,8 +51,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Ticket Status",
-   "options": "Ticket Status",
-   "reqd": 1
+   "options": "Ticket Status"
   },
   {
    "depends_on": "eval:doc.status==\"Resolved\" || doc.status==\"Closed\";",
@@ -130,7 +127,8 @@
    "fieldtype": "Table",
    "hidden": 1,
    "label": "Ticket Timeline",
-   "options": "Ticket Timeline Entry"
+   "options": "Ticket Timeline Entry",
+   "show_on_timeline": 1
   },
   {
    "fieldname": "previous_status",
@@ -176,7 +174,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 10:13:02.430288",
+ "modified": "2025-06-24 12:57:08.546902",
  "modified_by": "Administrator",
  "module": "Genie",
  "name": "Ticket Details",
