@@ -59,12 +59,35 @@ def received_host_comment(doc):
 	cmt.comment_by = f"BizmapSupport ({doc['comment_by']})"
 	cmt.content = doc['content'] + f"{doc['comment_by']} from Bizmap Support"
 	cmt.custom_is_system_generated = 1
-
-	frappe.logger().debug(f"Current User: {frappe.session.user}, Roles: {frappe.get_roles()}")
 	cmt.save()
-
+	frappe.log_error(f"Comment saved: {cmt.name}", "Comment Save Debug")
 	frappe.db.set_value("Comment", cmt.name, "owner", doc['comment_by'])
 	frappe.db.commit()
+
+	# ticket = frappe.get_doc("Ticket Details", doc['client_ticket'])
+	# recipient_user = ticket.owner
+
+	# # Send real-time notification
+	# frappe.publish_realtime(
+	# 	event="eval_js",
+	# 	message={
+	# 		"message": f"You got a reply on Ticket: {ticket.name}"
+	# 	},
+	# 	user=recipient_user
+	# )
+
+	# # Create Notification Log
+	# frappe.get_doc({
+	# 	"doctype": "Notification Log",
+	# 	"subject": f"New Reply on Ticket #{ticket.name} for {recipient_user}",
+	# 	"for_user": recipient_user,
+	# 	"document_type": "Ticket Details",
+	# 	"document_name": ticket.name,
+	# 	"from_user": doc['comment_by'],
+	# 	"type": "Alert",
+	# }).insert(ignore_permissions=True)
+
+	# frappe.db.commit()
 
 @frappe.whitelist()
 def set_status(doc):
@@ -273,7 +296,7 @@ def sync_timeline_to_support_system(doc):
 					"date": frappe.utils.today(),
 					"status": doc.get('status'),
 					"notes": timeline_entry.notes,
-					"added_by": timeline_entry.added_by
+					"added_by": get_user_fullname(frappe.session.user)
 				}
 				response = requests.post(url, headers=headers, json=data)
 				frappe.log_error(f"URL: {url}\nHEADERS: {headers}\nDATA: {data}\nResponse: {response}","PUT Data info")

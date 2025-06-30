@@ -17,11 +17,10 @@ def after_insert(doc, method):
 			# Check if the comment is from the host
 			client_comment(doc)
 		else:
-			user = frappe.db.get_value("User", {"full_name": doc.comment_by}, "name")
+			user = frappe.db.get_value("User", {"full_name": doc.comment_email}, "name")
 			if user:
-				pass
-				# Send notification to the user
-				# send_notification(user, doc)
+				send_notification(user, doc)
+
 @frappe.whitelist()
 def client_comment(doc):
 	settings = frappe.get_cached_doc("Genie Settings")
@@ -47,7 +46,7 @@ def client_comment(doc):
 			timeout=10  # Optional timeout
 		)
 		response.raise_for_status()
-		
+
 		# Log and return the response
 		frappe.log_error(f"API Response: {response.json()}", "API Success")
 		return response.json()
@@ -65,21 +64,19 @@ def client_comment(doc):
 		frappe.throw("An unexpected error occurred while calling the API.")
 
 
+@frappe.whitelist()
 def send_notification(user, doc):
-	frappe.publish_realtime(
-		event="eval_js",
-		message={
-			"message": f"You got a reply on {doc.reference_doctype}: {doc.reference_name}"
-		},
-		user=user
-	)
-	frappe.get_doc({
-			"doctype": "Notification Log",
-			"subject": "You received a reply",
-			"for_user": user,
-			"document_type": doc.reference_doctype,
-			"document_name": doc.reference_name,
-			"from_user": doc.owner,
-			"type": "Alert",
-		}).insert(ignore_permissions=True)
+	ticket = frappe.get_doc(doc.reference_doctype, doc.reference_name)
+	notification_log = frappe.get_doc({
+		"doctype": "Notification Log",
+		"subject": f"You received a new comment on your ticket {doc.reference_name}",
+		"for_user": ticket.owner,
+		"document_type": doc.reference_doctype,
+		"document_name": doc.reference_name,
+		"from_user": doc.owner,
+		"type": "Alert"
+	})
+	notification_log.insert(ignore_permissions=True)
+	frappe.db.commit()
+	frappe.db.set_value("Notification Log", notification_log.name, "owner", notification_log.for_user)
 	frappe.db.commit()
