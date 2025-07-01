@@ -3,7 +3,7 @@ import frappe
 import requests
 
 import json
-from genie.utils.requests import make_request
+from supportdesk.utils.requests import make_request
 
 import frappe
 from frappe.utils import get_url
@@ -23,7 +23,7 @@ def after_insert(doc, method):
 
 @frappe.whitelist()
 def client_comment(doc):
-	settings = frappe.get_cached_doc("Genie Settings")
+	settings = frappe.get_cached_doc("supportdesk Settings")
 
 	headers = {
 		"Authorization": f"token {settings.get_password('support_api_token')}"

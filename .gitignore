@@ -3,6 +3,6 @@
 *.egg-info
 *.swp
 tags
-genie/docs/current
+supportdesk/docs/current
 node_modules/
-genie/public/dist/*
+supportdesk/public/dist/*

@@ -2,7 +2,7 @@ import frappe
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Concat_ws
 from frappe.utils import today
-from genie.utils.requests import make_request
+from supportdesk.utils.requests import make_request
 import requests
 import frappe
 from frappe.model.document import Document

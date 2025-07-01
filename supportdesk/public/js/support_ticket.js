@@ -2,13 +2,13 @@
 // MIT License. See license.txt
 // Recording part referrenced from https://github.com/TylerPottsDev/yt-js-screen-recorder
 
-frappe.provide("genie");
+frappe.provide("supportdesk");
 
-genie.chunks = [];
-genie.blob = null;
-genie.blobURL = null;
+supportdesk.chunks = [];
+supportdesk.blob = null;
+supportdesk.blobURL = null;
 
-genie.SupportTicket = class SupportTicket {
+supportdesk.SupportTicket = class SupportTicket {
 	constructor() {
 		if (!frappe.boot.genie_support_enabled) {
 			frappe.msgprint(__("Ticket raising is not enabled for this site."));
@@ -68,7 +68,7 @@ genie.SupportTicket = class SupportTicket {
 					fieldtype: "Button",
 					hidden: 1,
 					click: () => {
-						window.open(genie.blobURL, "_blank");
+						window.open(supportdesk.blobURL, "_blank");
 					}
 				},
 				{
@@ -85,9 +85,9 @@ genie.SupportTicket = class SupportTicket {
 							return;
 						}
 
-						genie.chunks = [];
-						genie.blob = null;
-						genie.blobURL = null;
+						supportdesk.chunks = [];
+						supportdesk.blob = null;
+						supportdesk.blobURL = null;
 
 						this.dialog.set_df_property("record_screen", "label", "Start Recording")
 						this.dialog.set_df_property("view_recording", "hidden", 1);
@@ -142,13 +142,13 @@ genie.SupportTicket = class SupportTicket {
 
 		this.inUpload = true;
 		let screen_recording = null;
-		if (genie.blob) {
+		if (supportdesk.blob) {
 			frappe.show_alert({
 				indicator: "yellow",
 				message: __("Raising ticket. Please wait..."),
 			})
-			screen_recording = await this.blobToBase64(genie.blob);
-			screen_recording = await genie.UploadFile(genie.blob);
+			screen_recording = await this.blobToBase64(supportdesk.blob);
+			screen_recording = await supportdesk.UploadFile(supportdesk.blob);
 			if (!screen_recording) {
 				frappe.show_alert({
 					indicator: "red",
@@ -162,7 +162,7 @@ genie.SupportTicket = class SupportTicket {
 		this.inUpload = false;
 		console.log(values.category);
 		frappe.call({
-			method: "genie.utils.support.create_ticket",
+			method: "supportdesk.utils.support.create_ticket",
 			type: "POST",
 			args: {
 				"title": values.ticket_title,
@@ -196,9 +196,9 @@ genie.SupportTicket = class SupportTicket {
 		this.recordedVideo = null;
 		this.inUpload = false;
 
-		genie.chunks = [];
-		genie.blob = null;
-		genie.blobURL = null;
+		supportdesk.chunks = [];
+		supportdesk.blob = null;
+		supportdesk.blobURL = null;
 
 		this.maxFileSizeInBytes = frappe.boot.genie_max_file_size * 1024 * 1024;
 		this.sizeWarning = (frappe.boot.genie_max_file_size / 4) * 1024 * 1024;
@@ -227,11 +227,11 @@ genie.SupportTicket = class SupportTicket {
 		await this.setupStream();
 
 		if (this.stream && this.audio) {
-			genie.chunks = [];
+			supportdesk.chunks = [];
 			this.mixedStream = new MediaStream([...this.stream.getTracks(), ...this.audio.getTracks()]);
 			this.recorder = new MediaRecorder(this.mixedStream);
 			this.recorder.ondataavailable = (e) => {
-				genie.chunks.push(e.data);
+				supportdesk.chunks.push(e.data);
 				this.checkFileSize();
 			};
 			this.recorder.onstop = this.handleStop;
@@ -268,7 +268,7 @@ genie.SupportTicket = class SupportTicket {
 	}
 
 	checkFileSize() {
-		const totalSize = genie.chunks.reduce((acc, chunk) => acc + chunk.size, 0);
+		const totalSize = supportdesk.chunks.reduce((acc, chunk) => acc + chunk.size, 0);
 
 		if (totalSize >= this.maxFileSizeInBytes) {
 			frappe.show_alert({
@@ -290,8 +290,8 @@ genie.SupportTicket = class SupportTicket {
 	}
 
 	handleStop(e) {
-		genie.blob = new Blob(genie.chunks, { 'type': 'video/mp4' });
-		genie.blobURL = URL.createObjectURL(genie.blob);
+		supportdesk.blob = new Blob(supportdesk.chunks, { 'type': 'video/mp4' });
+		supportdesk.blobURL = URL.createObjectURL(supportdesk.blob);
 
 		this.stream.getTracks().forEach((track) => track.stop());
 		this.audio && this.audio.getTracks().forEach((track) => track.stop());

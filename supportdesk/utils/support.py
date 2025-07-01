@@ -5,18 +5,16 @@ import re
 import frappe
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Concat_ws
-from frappe.utils import cint, flt, get_url, now
+from frappe.utils import cint, flt, get_url, nowdate, add_days
 from frappe.utils.safe_exec import get_safe_globals, safe_eval
 import requests
 from datetime import datetime
 import json
 
-# from genie.utils.requests import make_request
-
 
 @frappe.whitelist()
 def create_local_ticket(subject, description, category, screen_recording):
-	settings = frappe.get_cached_doc("Genie Settings")
+	settings = frappe.get_cached_doc("supportdesk Settings")
 	setting_details = generate_ticket_details(settings)
 
 	description = re.sub(r'<[^>]+>', '', description)   ## convert from html to plaintext

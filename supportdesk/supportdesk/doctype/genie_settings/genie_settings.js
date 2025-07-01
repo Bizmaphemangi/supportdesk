@@ -5,7 +5,7 @@ frappe.ui.form.on("Genie Settings", {
 	refresh(frm) {
 
 		// frm.add_custom_button(__("Raise Ticket"), function () {
-		// 	new genie.SupportTicket();
+		// 	new supportdesk.SupportTicket();
 		// });
 	},
 });

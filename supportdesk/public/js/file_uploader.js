@@ -1,9 +1,9 @@
 // Copyright (c) 2023, Wahni IT Solutions Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
-frappe.provide("genie");
+frappe.provide("supportdesk");
 
-genie.UploadFile = function (file) {
+supportdesk.UploadFile = function (file) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('loadstart', (e) => {

@@ -1,13 +1,13 @@
-from genie.setup.file import create_genie_folder
+from supportdesk.setup.file import create_supportdesk_folder
 import frappe
 
 def after_install():
-    create_genie_folder()
+    create_supportdesk_folder()
     create_support_user()
-    create_genie_role()
+    create_supportdesk_role()
 
 
-def create_genie_role():
+def create_supportdesk_role():
     # Check if the role already exists
     if not frappe.db.exists("Role", "support"):
         try:
@@ -15,7 +15,7 @@ def create_genie_role():
             role = frappe.get_doc({
                 "doctype": "Role",
                 "role_name": "Support",
-                "description": "Role for Genie App Users",
+                "description": "Role for SupportDesk App Users",
             })
             role.insert(ignore_permissions=True)
             frappe.db.commit()

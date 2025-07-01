@@ -4,15 +4,15 @@ include *.json
 include *.md
 include *.py
 include *.txt
-recursive-include genie *.css
-recursive-include genie *.csv
-recursive-include genie *.html
-recursive-include genie *.ico
-recursive-include genie *.js
-recursive-include genie *.json
-recursive-include genie *.md
-recursive-include genie *.png
-recursive-include genie *.py
-recursive-include genie *.svg
-recursive-include genie *.txt
-recursive-exclude genie *.pyc
+recursive-include supportdesk *.css
+recursive-include supportdesk *.csv
+recursive-include supportdesk *.html
+recursive-include supportdesk *.ico
+recursive-include supportdesk *.js
+recursive-include supportdesk *.json
+recursive-include supportdesk *.md
+recursive-include supportdesk *.png
+recursive-include supportdesk *.py
+recursive-include supportdesk *.svg
+recursive-include supportdesk *.txt
+recursive-exclude supportdesk *.pyc

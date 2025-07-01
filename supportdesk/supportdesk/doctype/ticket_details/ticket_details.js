@@ -38,7 +38,7 @@ frappe.ui.form.on("Ticket Details", {
 
 
         frappe.call({
-        method: 'genie.utils.support.sync_details_to_support',
+        method: 'supportdesk.utils.support.sync_details_to_support',
         args: {
           doc: frm.doc
         },
@@ -62,7 +62,7 @@ frappe.ui.form.on("Ticket Details", {
                     added_by: frappe.user_info(frappe.session.user).fullname
                 });
           frappe.call({
-            method: 'genie.utils.support.sync_timeline_to_support_system',
+            method: 'supportdesk.utils.support.sync_timeline_to_support_system',
             args: {
               doc: frm.doc
             },

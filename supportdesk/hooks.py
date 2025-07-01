@@ -1,7 +1,7 @@
 from . import __version__ as app_version
 
-app_name = "genie"
-app_title = "Genie"
+app_name = "supportdesk"
+app_title = "supportdesk"
 app_publisher = "Wahni IT Solutions Pvt Ltd"
 app_description = "Your guide to unlocking full potential of ERPNext"
 app_email = "support@wahni.com"
@@ -11,15 +11,15 @@ app_license = "MIT"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/genie/css/genie.css"
-app_include_js = ["genie.bundle.js"]
+# app_include_css = "/assets/supportdesk/css/supportdesk.css"
+app_include_js = ["supportdesk.bundle.js"]
 
 # include js, css files in header of web template
-# web_include_css = "/assets/genie/css/genie.css"
-# web_include_js = "/assets/genie/js/genie.js"
+# web_include_css = "/assets/supportdesk/css/supportdesk.css"
+# web_include_js = "/assets/supportdesk/js/supportdesk.js"
 
 # include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "genie/public/scss/website"
+# website_theme_scss = "supportdesk/public/scss/website"
 
 # include js, css files in header of web form
 # webform_include_js = {"doctype": "public/js/doctype.js"}
@@ -46,7 +46,7 @@ doctype_js = {"User": "public/js/impersonation.js","Comment": "public/js/comment
 # }
 
 # Boot Info
-extend_bootinfo = "genie.boot.set_bootinfo"
+extend_bootinfo = "supportdesk.boot.set_bootinfo"
 
 # Generators
 # ----------
@@ -59,33 +59,33 @@ extend_bootinfo = "genie.boot.set_bootinfo"
 
 # add methods and filters to jinja environment
 # jinja = {
-#	"methods": "genie.utils.jinja_methods",
-#	"filters": "genie.utils.jinja_filters"
+#	"methods": "supportdesk.utils.jinja_methods",
+#	"filters": "supportdesk.utils.jinja_filters"
 # }
 
 # Installation
 # ------------
 
-# before_install = "genie.install.before_install"
-after_install = "genie.setup.install.after_install"
+# before_install = "supportdesk.install.before_install"
+after_install = "supportdesk.setup.install.after_install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "genie.uninstall.before_uninstall"
-# after_uninstall = "genie.uninstall.after_uninstall"
+# before_uninstall = "supportdesk.uninstall.before_uninstall"
+# after_uninstall = "supportdesk.uninstall.after_uninstall"
 
 
 # Migration
 # ------------
-after_migrate = "genie.setup.migrate.after_migrate"
+after_migrate = "supportdesk.setup.migrate.after_migrate"
 
 
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
 
-# notification_config = "genie.notifications.get_notification_config"
+# notification_config = "supportdesk.notifications.get_notification_config"
 
 # Permissions
 # -----------
@@ -113,53 +113,53 @@ override_doctype_class = {
 
 doc_events = {
 	"Comment": {
-		"after_insert": "genie.custom_comment.after_insert"
+		"after_insert": "supportdesk.custom_comment.after_insert"
 	}
 }
 
-# on_session_creation = "genie.custom_comment.on_session_creation"
+# on_session_creation = "supportdesk.custom_comment.on_session_creation"
 
 # Scheduled Tasks
 # ---------------
 
 scheduler_events = {
 #	"all": [
-#		"genie.tasks.all"
+#		"supportdesk.tasks.all"
 #	],
 "cron": {
-        "* * * * *": "genie.utils.support.auto_close_tickets"
+        "* * * * *": "supportdesk.utils.support.auto_close_tickets"
     }
 #	"daily": [
-#		"genie.tasks.daily"
+#		"supportdesk.tasks.daily"
 #	],
 	# "hourly": [
-	# 	"genie.support.auto_close_tickets"
+	# 	"supportdesk.support.auto_close_tickets"
 	# ],
 #	"weekly": [
-#		"genie.tasks.weekly"
+#		"supportdesk.tasks.weekly"
 #	],
 #	"monthly": [
-#		"genie.tasks.monthly"
+#		"supportdesk.tasks.monthly"
 	# ],
 }
 
 # Testing
 # -------
 
-# before_tests = "genie.install.before_tests"
+# before_tests = "supportdesk.install.before_tests"
 
 # Overriding Methods
 # ------------------------------
 #
 # override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "genie.event.get_events"
+#	"frappe.desk.doctype.event.event.get_events": "supportdesk.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-#	"Task": "genie.task.get_dashboard_data"
+#	"Task": "supportdesk.task.get_dashboard_data"
 # }
 
 # exempt linked doctypes from being automatically cancelled
@@ -195,5 +195,5 @@ scheduler_events = {
 # --------------------------------
 
 # auth_hooks = [
-#	"genie.auth.validate"
+#	"supportdesk.auth.validate"
 # ]

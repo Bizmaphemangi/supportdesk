@@ -7,7 +7,7 @@ frappe.ui.form.on("User", {
 		if (!frm.doc.__islocal && frm.doc.enabled && frappe.user.has_role("System Manager")) {
 			frm.add_custom_button(__("Impersonate"), function() {
 				frappe.call({
-					method: "genie.utils.impersonation.generate_impersonation_url",
+					method: "supportdesk.utils.impersonation.generate_impersonation_url",
 					args: {
 						"user": frm.doc.name
 					},

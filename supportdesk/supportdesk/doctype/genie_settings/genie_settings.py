@@ -4,7 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from genie.utils.requests import make_request
+from supportdesk.utils.requests import make_request
 
 
 class GenieSettings(Document):
