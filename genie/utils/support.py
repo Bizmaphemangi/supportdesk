@@ -302,3 +302,26 @@ def sync_timeline_to_support_system(doc):
 				frappe.log_error(f"URL: {url}\nHEADERS: {headers}\nDATA: {data}\nResponse: {response}","PUT Data info")
 		except Exception as e:
 			frappe.log_error(f"timeline sync error:\n\n {str(e)}")
+
+
+def auto_close_tickets():
+	frappe.log_error("Auto-close job triggered")
+
+	"""
+	Automatically close tickets that have been Opened for more than X days (default 4).
+	"""
+	close_days = frappe.get_cached_value("Genie Settings", None, "close_ticket_after_days") or 4
+	today = nowdate()
+	cutoff_date = add_days(today, -close_days)
+
+	tickets_to_close = frappe.db.get_all("Ticket Details", filters={
+						"status": ["in", ["Open", "Re-Opened"]],
+						"modified": ["<", cutoff_date]
+					}, fields=["name", "modified"])
+
+	for ticket in tickets_to_close:
+		ticket_doc = frappe.get_doc("Ticket Details", ticket.name)
+		ticket_doc.status = "Closed"
+		ticket_doc.save(ignore_permissions=True)
+
+	frappe.db.commit()

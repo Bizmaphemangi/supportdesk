@@ -126,6 +126,9 @@ scheduler_events = {
 #	"all": [
 #		"genie.tasks.all"
 #	],
+"cron": {
+        "* * * * *": "genie.utils.support.auto_close_tickets"
+    }
 #	"daily": [
 #		"genie.tasks.daily"
 #	],
